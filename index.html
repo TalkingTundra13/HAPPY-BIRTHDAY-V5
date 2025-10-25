@@ -13,7 +13,7 @@
   <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
 
   <!-- Update title and description for a birthday theme -->
-  <title>HBD 5.0 | Aoudumber Bade</title>
+  <title>VER 6.7 | HAPPY BIRTHDAY</title>
   <link rel="icon" type="image/x-icon" href="https://www.palingit.com/favicon.ico" />
   <meta name="description" content="A special birthday greeting" />
 </head>
@@ -52,11 +52,11 @@
       <blockquote id="bq" data-text="💞">
         <!-- Update the messages for a birthday greeting -->
         <p id="kalimat">
-          Happy Birthday, gorgeous! Today is all about celebrating you.
+          Felicidades!!! Ahora, verás todas las cosas que he estado preparando desde verano.
         </p>
 
         <!-- Message -->
-        <p id="pesan1">Tap here for your birthday surprise! 🎉</p>
+        <p id="pesan1">Toca aquí para tu primera sorpresa de cumpleaños!</p>
         <div id="kolombaru">
           <li id="lv1">🎂</li>
           <li id="lv2">🎁</li>
@@ -64,29 +64,30 @@
           <li id="lv4">💖</li>
         </div>
 
-        <p id="pesan2">You shine brighter every year! ✨</p>
-        <p id="pesan3">Do you know what makes today extra special?</p>
-        <p id="pesan4" class="sty2">It’s your birthday!</p>
+        <p id="pesan2">Eres una persona especial, y hoy es un gran dia para tí.</p>
+        <p id="pesan3">Sabes que lo hace también mas especial?</p>
+        <p id="pesan4" class="sty2">El hecho de que hayan pasado exactamente 705 dias (1 año, 11 meses, 5 dias) desde el dia que nos conocimos y sigamos hablando!</p>
         <p id="pesan5" class="sty2">
-          Today, I wish you a year filled with laughter, love, and unforgettable moments.
+          Hoy, yo, te deseo que tengas un gran día y que lo pases super bien (en una forma legal😅) el dia de tu cumpleaños.
         </p>
         <p id="pesan6" class="sty2">
-          Remember, you deserve every happiness in the world. Celebrate big and enjoy every moment!
+          Recuerda, todo lo que ha pasado este año lo has podido superar estando aquí, en este mundo.
         </p>
 
         <!-- Next Button -->
-        <p id="opsL">Tap to continue the celebration!</p>
+        <p id="opsL">Clica aquí para continuar!</p>
       </blockquote>
     </div>
 
     <!-- Send Message Button -->
-    <div id="Tombol"><a id="By">&#128140; Next</a></div>
+    <div id="Tombol"><a id="By">&#128140; Siguiente</a></div>
 
     <!-- Rejected Message (if needed) -->
     <div id="pesanditolak">
       <img id="stikerditolak" src="https://feeldreams.github.io/weee.gif" />
       <p id="kataditolak">
-        Oops! You can’t skip this birthday magic.
+        JAJAJJJAJAJA
+        Tienes que abrirlo.
       </p>
     </div>
   </div>
@@ -128,27 +129,27 @@
 
     async function inipesan() {
       var { value: nama } = await swals.fire({
-        title: "What's your beautiful name?",
+        title: "Cual es tu nombre? (Pon Wind)",
         input: "text",
       });
       if (nama && nama.length < 11) {
         window.nama = nama;
-        vketikhalo = "Happy Birthday, " + nama + "!";
+        vketikhalo = "Felicidades, " + nama + "!";
         mulainama();
       } else {
         await Swal.fire({
-          title: "Your name is lovely, but it seems a bit long.",
-          text: "Please enter a shorter name.",
+          title: "Me encanta tu nombre, pero es demasiado largo.",
+          text: "Pon un nombre un pelín mas corto.",
           icon: "warning",
         });
         inipesan();
       }
     }
 
-    var tanya = "How about we celebrate your birthday in style?";
-    var opstanya = "Your choice is:";
-    var tompositif = "Absolutely, let’s celebrate! 🎉";
-    var tomnegatif = "Maybe another time";
+    var tanya = "Que te parece si te enseño tu primer regalo?";
+    var opstanya = "Puedes elegir:";
+    var tompositif = "Siiii.";
+    var tomnegatif = "Hell no💀";
 
     async function pertanyaan() {
       var { isConfirmed: prtanya } = await swals.fire({
@@ -160,10 +161,10 @@
         cancelButtonText: "" + tomnegatif,
       });
       if (prtanya) {
-        pesanwhatsapp = "Yes " + nama + ", let the birthday magic begin!";
+        pesanwhatsapp = "Bien " + nama + ", hagamos que empieze la magia de tu cumpleaños!";
         menuju();
       } else {
-        pesanwhatsapp = nama + ", don't miss out on the birthday fun!";
+        pesanwhatsapp = nama + ", no te pierdas este día tan especial!";
         await swalst.fire({
           title: "" + kataditolak.innerHTML,
           timer: 2000,
