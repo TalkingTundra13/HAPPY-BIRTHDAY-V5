@@ -100,6 +100,38 @@
     display: none;
   }
   
+  .button {
+    /* width: 500px; */
+    height: 121px;
+    padding: 10px 30px;
+    background: url('./images/Message.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 20px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    /* border-top: 9px dotted #ff3600; */
+    position: absolute;
+    top: 13%;
+    left: 24%;
+    opacity: 0;                     /* by default hidden */
+    animation: showUp 1s forwards;  /* run animation */
+    animation-delay: 5s;   
+    transition: all .3s ease-in-out;
+}
+
+.button:hover {
+  transform: scale(2.1);
+}
+
+@keyframes showUp {
+  to {
+    opacity: 1;   /* element visible */
+  }
+}
+
   @-webkit-keyframes spin {
     from{
       -webkit-transform: rotateY(0deg);
