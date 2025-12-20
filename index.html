@@ -45,6 +45,7 @@
       border-radius: 20px;
       backdrop-filter: blur(10px);
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      max-width: 90%;
     }
     
     .timer-title {
@@ -54,7 +55,7 @@
     }
     
     .timer-display {
-      font-size: 4em;
+      font-size: 3em;
       font-weight: bold;
       margin: 30px 0;
       font-family: 'Dancing Script', cursive;
@@ -65,6 +66,21 @@
       font-size: 1.2em;
       opacity: 0.9;
       margin-top: 20px;
+    }
+    
+    .timer-date {
+      font-size: 0.9em;
+      opacity: 0.8;
+      margin-top: 10px;
+    }
+    
+    .music-note {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 2em;
+      opacity: 0.6;
+      animation: float 3s ease-in-out infinite;
     }
     
     @keyframes pulse {
@@ -82,6 +98,23 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
     }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @media (max-width: 600px) {
+      .timer-title {
+        font-size: 1.5em;
+      }
+      .timer-display {
+        font-size: 2em;
+      }
+      .timer-message {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 
@@ -93,9 +126,22 @@
     <div class="timer-content">
       <div class="gift-icon">🎁</div>
       <div class="timer-title">Tu regalo está bloqueado...</div>
-      <div class="timer-display" id="countdown">--:--:--</div>
-      <div class="timer-message">Se desbloqueará a las 12:40 🎂</div>
+      <div class="timer-display" id="countdown">--:--:--:--</div>
+      <div class="timer-message">Se desbloqueará el 21 de Diciembre a las 00:00 🎂</div>
+      <div class="timer-date" id="currentDate"></div>
     </div>
+    <div class="music-note">🎵</div>
+    
+    <!-- Background music iframe (YouTube embed set to autoplay and loop) -->
+    <iframe 
+      id="timerMusic" 
+      width="0" 
+      height="0" 
+      src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0" 
+      frameborder="0" 
+      allow="autoplay; encrypted-media"
+      style="display:none;">
+    </iframe>
   </div>
   
   <audio src="./y2mate (mp3cut.net).mp3" id="linkmp3" class="sembunyi"></audio>
@@ -175,40 +221,49 @@
     // Timer Script
     function checkTime() {
       const now = new Date();
-      const targetHour = 12;
-      const targetMinute = 40;
       
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
-      const currentSecond = now.getSeconds();
+      // Target: December 21, 2025 at 00:00:00
+      const targetDate = new Date(2025, 11, 21, 0, 0, 0); // Month is 0-indexed, so 11 = December
       
-      // Check if current time is 12:40 or later
-      if (currentHour > targetHour || (currentHour === targetHour && currentMinute >= targetMinute)) {
+      // Show current date
+      const currentDateStr = now.toLocaleDateString('es-ES', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      document.getElementById('currentDate').textContent = currentDateStr;
+      
+      // Check if current time is on or after target date
+      if (now >= targetDate) {
+        // Remove iframe to stop music BEFORE hiding overlay
+        const musicIframe = document.getElementById('timerMusic');
+        if (musicIframe) {
+          musicIframe.src = ''; // Stop the video first
+          musicIframe.remove(); // Then remove it
+        }
         document.getElementById('timerOverlay').classList.add('hidden');
         return true;
       }
       
-      // Calculate time remaining
-      let hoursLeft = targetHour - currentHour;
-      let minutesLeft = targetMinute - currentMinute;
-      let secondsLeft = 60 - currentSecond;
+      // Calculate time remaining in milliseconds
+      const diff = targetDate - now;
       
-      if (secondsLeft === 60) {
-        secondsLeft = 0;
-      } else {
-        minutesLeft--;
-      }
-      
-      if (minutesLeft < 0) {
-        minutesLeft += 60;
-        hoursLeft--;
-      }
+      // Convert to days, hours, minutes, seconds
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
       
       // Format display
-      const display = 
-        String(hoursLeft).padStart(2, '0') + ':' +
-        String(minutesLeft).padStart(2, '0') + ':' +
-        String(secondsLeft).padStart(2, '0');
+      let display = '';
+      if (days > 0) {
+        display = `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      } else {
+        display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }
       
       document.getElementById('countdown').textContent = display;
       
@@ -225,7 +280,7 @@
             title: '¡Desbloqueado! 🎉',
             text: 'Ya puedes abrir tu regalo de cumpleaños',
             icon: 'success',
-            timer: 2000,
+            timer: 3000,
             showConfirmButton: false
           });
         }
@@ -316,4 +371,4 @@
   <script src="a.js"></script>
 </body>
 
-</html>      
+</html>
