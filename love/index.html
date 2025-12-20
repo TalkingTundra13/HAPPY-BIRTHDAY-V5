@@ -12,53 +12,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     <style>
-        /* Estilos para el modal del video */
-        #video-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-        }
-
-        #video-modal.active {
-            display: flex;
-        }
-
-        .video-container {
-            position: relative;
-            max-width: 90%;
-            max-height: 90%;
-        }
-
-        .video-container video {
-            width: 100%;
-            height: auto;
-            max-height: 80vh;
-        }
-
-        .close-video {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0 10px;
-        }
-
-        .close-video:hover {
-            color: #ff6b6b;
-        }
-
         #video-button {
             position: fixed;
             bottom: 30px;
@@ -100,14 +53,6 @@
             width: 100%;
             height: 100%;
         }
-
-        /* Mensaje de error para el video */
-        .video-error {
-            color: white;
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-        }
     </style>
 </head>
 
@@ -133,23 +78,9 @@
 
     <div id="music-container"></div>
     
-    <!-- Botón para mostrar el video -->
-    <button id="video-button" onclick="showVideo()">👀</button>
-
-    <!-- Modal del video -->
-    <div id="video-modal">
-        <div class="video-container">
-            <button class="close-video" onclick="closeVideo()">&times;</button>
-            <video id="cameo-video" controls preload="metadata">
-                <source src="./love/cameo.mp4" type="video/mp4">
-                Tu navegador no soporta el elemento de video.
-            </video>
-            <div id="video-error" class="video-error" style="display: none;">
-                ⚠️ No se pudo cargar el video. Verifica que el archivo "cameo.mp4" esté en la carpeta "love".
-            </div>
-        </div>
-    </div>
-
+    <!-- Botón para ver el video -->
+    <button id="video-button" onclick="window.location.href='https://winditsyourbirthday.netlify.app/love/cameo.mp4'">👀</button>
+    
     <div id="canva">
         <canvas id="canvas"></canvas>
     </div>
@@ -173,57 +104,6 @@
                 });
             }
         }
-
-        // Funciones para el video
-        function showVideo() {
-            const modal = document.getElementById('video-modal');
-            const video = document.getElementById('cameo-video');
-            const errorMsg = document.getElementById('video-error');
-            
-            modal.classList.add('active');
-            
-            // Intentar reproducir el video
-            video.play().catch(function(error) {
-                console.error('Error al reproducir el video:', error);
-                errorMsg.style.display = 'block';
-            });
-        }
-
-        function closeVideo() {
-            const modal = document.getElementById('video-modal');
-            const video = document.getElementById('cameo-video');
-            const errorMsg = document.getElementById('video-error');
-            
-            modal.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-            errorMsg.style.display = 'none';
-        }
-
-        // Manejar errores de carga del video
-        document.getElementById('cameo-video').addEventListener('error', function(e) {
-            console.error('Error al cargar el video:', e);
-            document.getElementById('video-error').style.display = 'block';
-        });
-
-        // Verificar cuando el video está listo
-        document.getElementById('cameo-video').addEventListener('loadeddata', function() {
-            console.log('Video cargado correctamente');
-        });
-
-        // Cerrar el modal al hacer clic fuera del video
-        document.getElementById('video-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeVideo();
-            }
-        });
-
-        // Cerrar con la tecla ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideo();
-            }
-        });
 
         window.onload = function () {
             var audio = document.getElementById("myAudio");
