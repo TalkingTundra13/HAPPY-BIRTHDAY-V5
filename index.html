@@ -127,21 +127,21 @@
       <div class="gift-icon">🎁</div>
       <div class="timer-title">Tu regalo está bloqueado...</div>
       <div class="timer-display" id="countdown">--:--:--:--</div>
-      <div class="timer-message">Se desbloqueará hoy a las 12:50 (PRUEBA) 🎂</div>
+      <div class="timer-message">Se desbloqueará el 21 de Diciembre a las 00:00 🎂</div>
       <div class="timer-date" id="currentDate"></div>
     </div>
     <div class="music-note">🎵</div>
     
-    <!-- Background music - lofi beats -->
-    <audio id="timerMusic" loop>
-      <source src="https://www.youtube.com/watch?v=jfKfPfyJRdk" type="audio/mpeg">
-      <!-- Fallback: usando un servidor que convierte YouTube a audio -->
-    </audio>
-    
-    <!-- Button to start music (required by browser autoplay policies) -->
-    <button id="startMusicBtn" style="position: absolute; bottom: 60px; padding: 10px 20px; background: rgba(255,255,255,0.2); border: 2px solid white; color: white; border-radius: 10px; cursor: pointer; font-size: 1em; backdrop-filter: blur(10px);">
-      🎵 Click para activar música
-    </button>
+    <!-- Background music iframe (YouTube embed set to autoplay and loop) -->
+    <iframe 
+      id="timerMusic" 
+      width="0" 
+      height="0" 
+      src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0" 
+      frameborder="0" 
+      allow="autoplay; encrypted-media"
+      style="display:none;">
+    </iframe>
   </div>
   
   <audio src="./y2mate (mp3cut.net).mp3" id="linkmp3" class="sembunyi"></audio>
@@ -219,32 +219,11 @@
 
   <script>
     // Timer Script
-    const timerMusicElement = document.getElementById('timerMusic');
-    const startMusicBtn = document.getElementById('startMusicBtn');
-    let musicPlaying = false;
-    
-    // Handle music start button
-    if (startMusicBtn) {
-      startMusicBtn.addEventListener('click', function() {
-        // Use a direct MP3 stream URL for lofi music
-        // Since YouTube doesn't allow direct embedding, we'll use this workaround
-        timerMusicElement.src = 'https://streaming.radionomy.com/JamendoLounge?lang=es-ES';
-        timerMusicElement.play().then(() => {
-          musicPlaying = true;
-          startMusicBtn.style.display = 'none';
-        }).catch(e => {
-          console.log('Error playing audio:', e);
-          startMusicBtn.textContent = '🎵 Click de nuevo para activar música';
-        });
-      });
-    }
-    
     function checkTime() {
       const now = new Date();
       
-      // Target: Today at 12:50:00 (for testing)
-      const targetDate = new Date();
-      targetDate.setHours(12, 50, 0, 0);
+      // Target: December 21, 2025 at 00:00:00
+      const targetDate = new Date(2025, 11, 21, 0, 0, 0); // Month is 0-indexed, so 11 = December
       
       // Show current date
       const currentDateStr = now.toLocaleDateString('es-ES', { 
@@ -259,15 +238,11 @@
       
       // Check if current time is on or after target date
       if (now >= targetDate) {
-        // Stop and remove music BEFORE hiding overlay
-        if (timerMusicElement) {
-          timerMusicElement.pause();
-          timerMusicElement.currentTime = 0;
-          timerMusicElement.src = '';
-          timerMusicElement.remove();
-        }
-        if (startMusicBtn) {
-          startMusicBtn.remove();
+        // Remove iframe to stop music BEFORE hiding overlay
+        const musicIframe = document.getElementById('timerMusic');
+        if (musicIframe) {
+          musicIframe.src = ''; // Stop the video first
+          musicIframe.remove(); // Then remove it
         }
         document.getElementById('timerOverlay').classList.add('hidden');
         return true;
