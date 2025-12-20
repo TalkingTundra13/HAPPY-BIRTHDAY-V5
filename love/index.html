@@ -84,6 +84,22 @@
         #video-button:active {
             transform: translateY(-1px);
         }
+
+        /* Estilos para el canvas de animación */
+        #canva {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 
@@ -101,7 +117,7 @@
             <img src="./images/r9.png" alt="">
             <img src="./images/r10.png" alt="">
             <p style="">Feliz<span style=""> Cumpleaños</span> Wind</p>
-            <button class="button" onclick="confetti()"></button>
+            <button class="button" onclick="launchConfetti()"></button>
         </div>
         <div id="ground"></div>
     </div>
@@ -122,11 +138,11 @@
         </div>
     </div>
 
-    <!-- <div id="canva">
+    <div id="canva">
         <canvas id="canvas"></canvas>
-    </div> -->
+    </div>
 
-    <!-- Audio tú automático phát -->
+    <!-- Audio automático -->
     <!-- <audio id="myAudio" autoplay playsinline>
         <source src="music/setlove.mp3" type="audio/mpeg">
         <source src="music/setlove.ogg" type="audio/ogg">
@@ -135,6 +151,15 @@
     <script src="main.js"></script>
 
     <script>
+        // Función para el confetti
+        function launchConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
         // Funciones para el video
         function showVideo() {
             const modal = document.getElementById('video-modal');
@@ -174,7 +199,7 @@
                 });
             }
 
-            // Hiệu ứng pháo hoa và trái tim
+            // Efectos de fuegos artificiales y corazones
             const canvas = document.getElementById("canvas");
             if (canvas) {
                 const ctx = canvas.getContext("2d");
