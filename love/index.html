@@ -100,6 +100,14 @@
             width: 100%;
             height: 100%;
         }
+
+        /* Mensaje de error para el video */
+        .video-error {
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+        }
     </style>
 </head>
 
@@ -132,10 +140,13 @@
     <div id="video-modal">
         <div class="video-container">
             <button class="close-video" onclick="closeVideo()">&times;</button>
-            <video id="cameo-video" controls>
+            <video id="cameo-video" controls preload="metadata">
                 <source src="./love/cameo.mp4" type="video/mp4">
                 Tu navegador no soporta el elemento de video.
             </video>
+            <div id="video-error" class="video-error" style="display: none;">
+                ⚠️ No se pudo cargar el video. Verifica que el archivo "cameo.mp4" esté en la carpeta "love".
+            </div>
         </div>
     </div>
 
@@ -154,28 +165,51 @@
     <script>
         // Función para el confetti
         function launchConfetti() {
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
         }
 
         // Funciones para el video
         function showVideo() {
             const modal = document.getElementById('video-modal');
             const video = document.getElementById('cameo-video');
+            const errorMsg = document.getElementById('video-error');
+            
             modal.classList.add('active');
-            video.play();
+            
+            // Intentar reproducir el video
+            video.play().catch(function(error) {
+                console.error('Error al reproducir el video:', error);
+                errorMsg.style.display = 'block';
+            });
         }
 
         function closeVideo() {
             const modal = document.getElementById('video-modal');
             const video = document.getElementById('cameo-video');
+            const errorMsg = document.getElementById('video-error');
+            
             modal.classList.remove('active');
             video.pause();
             video.currentTime = 0;
+            errorMsg.style.display = 'none';
         }
+
+        // Manejar errores de carga del video
+        document.getElementById('cameo-video').addEventListener('error', function(e) {
+            console.error('Error al cargar el video:', e);
+            document.getElementById('video-error').style.display = 'block';
+        });
+
+        // Verificar cuando el video está listo
+        document.getElementById('cameo-video').addEventListener('loadeddata', function() {
+            console.log('Video cargado correctamente');
+        });
 
         // Cerrar el modal al hacer clic fuera del video
         document.getElementById('video-modal').addEventListener('click', function(e) {
