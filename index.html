@@ -16,10 +16,88 @@
   <title>VER 6.7 | HAPPY BIRTHDAY</title>
   <link rel="icon" type="image/x-icon" href="https://www.palingit.com/favicon.ico" />
   <meta name="description" content="A special birthday greeting" />
+  
+  <style>
+    #timerOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Shippori Antique', sans-serif;
+    }
+    
+    #timerOverlay.hidden {
+      display: none;
+    }
+    
+    .timer-content {
+      text-align: center;
+      color: white;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+    
+    .timer-title {
+      font-size: 2em;
+      margin-bottom: 20px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .timer-display {
+      font-size: 4em;
+      font-weight: bold;
+      margin: 30px 0;
+      font-family: 'Dancing Script', cursive;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .timer-message {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin-top: 20px;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .gift-icon {
+      font-size: 5em;
+      margin-bottom: 20px;
+      animation: bounce 1s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+  </style>
 </head>
 
 <body style="background: linear-gradient(to bottom, #ffe1e1, #ff217de0), url(./r.jpg);
     height: 100vh;">
+  
+  <!-- Timer Overlay -->
+  <div id="timerOverlay">
+    <div class="timer-content">
+      <div class="gift-icon">🎁</div>
+      <div class="timer-title">Tu regalo está bloqueado...</div>
+      <div class="timer-display" id="countdown">--:--:--</div>
+      <div class="timer-message">Se desbloqueará a las 12:40 🎂</div>
+    </div>
+  </div>
+  
   <audio src="./y2mate (mp3cut.net).mp3" id="linkmp3" class="sembunyi"></audio>
 
   <div id="bodyblur">
@@ -94,6 +172,66 @@
   </div>
 
   <script>
+    // Timer Script
+    function checkTime() {
+      const now = new Date();
+      const targetHour = 12;
+      const targetMinute = 40;
+      
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      const currentSecond = now.getSeconds();
+      
+      // Check if current time is 12:40 or later
+      if (currentHour > targetHour || (currentHour === targetHour && currentMinute >= targetMinute)) {
+        document.getElementById('timerOverlay').classList.add('hidden');
+        return true;
+      }
+      
+      // Calculate time remaining
+      let hoursLeft = targetHour - currentHour;
+      let minutesLeft = targetMinute - currentMinute;
+      let secondsLeft = 60 - currentSecond;
+      
+      if (secondsLeft === 60) {
+        secondsLeft = 0;
+      } else {
+        minutesLeft--;
+      }
+      
+      if (minutesLeft < 0) {
+        minutesLeft += 60;
+        hoursLeft--;
+      }
+      
+      // Format display
+      const display = 
+        String(hoursLeft).padStart(2, '0') + ':' +
+        String(minutesLeft).padStart(2, '0') + ':' +
+        String(secondsLeft).padStart(2, '0');
+      
+      document.getElementById('countdown').textContent = display;
+      
+      return false;
+    }
+    
+    // Check immediately
+    if (!checkTime()) {
+      // Update every second
+      setInterval(function() {
+        if (checkTime()) {
+          // Show unlock animation
+          Swal.fire({
+            title: '¡Desbloqueado! 🎉',
+            text: 'Ya puedes abrir tu regalo de cumpleaños',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }
+      }, 1000);
+    }
+    
     // Main script remains similar; further changes are made in a.js if needed.
     const body = document.querySelector("body");
     const swalst = Swal.mixin({
@@ -178,4 +316,4 @@
   <script src="a.js"></script>
 </body>
 
-</html>
+</html>      
