@@ -12,46 +12,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     <style>
-        #video-button {
+        .eyes-button {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 50px;
+            background: transparent;
             border: none;
-            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            z-index: 100;
+            z-index: 9999;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
         }
-
-        #video-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        #video-button:active {
-            transform: translateY(-1px);
-        }
-
-        /* Estilos para el canvas de animación */
-        #canva {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        #canvas {
-            width: 100%;
-            height: 100%;
+        
+        .eyes-button:hover {
+            transform: scale(1.2);
         }
     </style>
 </head>
@@ -76,135 +51,119 @@
         <div id="ground"></div>
     </div>
 
-    <div id="music-container"></div>
-    
-    <!-- Botón para ver el video -->
-    <button id="video-button" onclick="window.location.href='https://winditsyourbirthday.netlify.app/love/cameo.mp4'">👀</button>
-    
-    <div id="canva">
-        <canvas id="canvas"></canvas>
-    </div>
+    <!-- Botón de ojos -->
+    <button class="eyes-button" onclick="window.location.href='https://winditsyourbirthday.netlify.app/love/cameo.mp4'">👀</button>
 
-    <!-- Audio automático -->
+    <div id="music-container"></div>
+    <!-- <div id="canva">
+        <canvas id="canvas"></canvas>
+    </div> -->
+
+    <!-- Audio tự động phát -->
     <!-- <audio id="myAudio" autoplay playsinline>
         <source src="music/setlove.mp3" type="audio/mpeg">
         <source src="music/setlove.ogg" type="audio/ogg">
     </audio> -->
-    <script src='https://cdn.jsdelivr.net/npm/canvas-confetti@1/dist/confetti.browser.min.js'></script>
+      <script src='https://cdn.jsdelivr.net/npm/canvas-confetti@1/dist/confetti.browser.min.js'></script>
     <script src="main.js"></script>
 
     <script>
-        // Función para el confetti
-        function launchConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-            }
-        }
-
         window.onload = function () {
             var audio = document.getElementById("myAudio");
-            if (audio) {
-                audio.muted = false;
-                audio.play().catch(function (e) {
-                    console.log('Audio playback failed:', e);
-                });
-            }
+            audio.muted = false;
+            audio.play().catch(function (e) {
+                console.log('Audio playback failed:', e);
+            });
 
-            // Efectos de fuegos artificiales y corazones
+            // Hiệu ứng pháo hoa và trái tim
             const canvas = document.getElementById("canvas");
-            if (canvas) {
-                const ctx = canvas.getContext("2d");
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-                function random(min, max) {
-                    return Math.random() * (max - min) + min;
-                }
-
-                function Firework(x, y) {
-                    this.x = x;
-                    this.y = y;
-                    this.radius = random(2, 4);
-                    this.color = `hsl(${random(0, 360)}, 100%, 50%)`;
-                    this.vx = random(-3, 3);
-                    this.vy = random(-3, 3);
-                    this.life = 100;
-                }
-
-                Firework.prototype.draw = function () {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
-                };
-
-                Firework.prototype.update = function () {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.life--;
-                };
-
-                function Heart(x, y) {
-                    this.x = x;
-                    this.y = y;
-                    this.size = random(20, 40);
-                    this.color = 'red';
-                    this.vy = random(-2, -1);
-                    this.opacity = 1;
-                }
-
-                Heart.prototype.draw = function () {
-                    ctx.beginPath();
-                    ctx.moveTo(this.x, this.y);
-                    ctx.bezierCurveTo(this.x - this.size / 2, this.y - this.size / 2, this.x - this.size, this.y + this.size / 3, this.x, this.y + this.size);
-                    ctx.bezierCurveTo(this.x + this.size, this.y + this.size / 3, this.x + this.size / 2, this.y - this.size / 2, this.x, this.y);
-                    ctx.fillStyle = this.color;
-                    ctx.globalAlpha = this.opacity;
-                    ctx.fill();
-                    ctx.globalAlpha = 1;
-                };
-
-                Heart.prototype.update = function () {
-                    this.y += this.vy;
-                    this.opacity -= 0.01;
-                };
-
-                let fireworks = [];
-                let hearts = [];
-
-                function animate() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    if (Math.random() < 0.1) {
-                        fireworks.push(new Firework(random(0, canvas.width), random(0, canvas.height)));
-                    }
-                    if (Math.random() < 0.05) {
-                        hearts.push(new Heart(random(0, canvas.width), canvas.height));
-                    }
-
-                    fireworks.forEach((firework, index) => {
-                        firework.draw();
-                        firework.update();
-                        if (firework.life <= 0) {
-                            fireworks.splice(index, 1);
-                        }
-                    });
-
-                    hearts.forEach((heart, index) => {
-                        heart.draw();
-                        heart.update();
-                        if (heart.opacity <= 0) {
-                            hearts.splice(index, 1);
-                        }
-                    });
-
-                    requestAnimationFrame(animate);
-                }
-                animate();
+            function random(min, max) {
+                return Math.random() * (max - min) + min;
             }
+
+            function Firework(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = random(2, 4);
+                this.color = `hsl(${random(0, 360)}, 100%, 50%)`;
+                this.vx = random(-3, 3);
+                this.vy = random(-3, 3);
+                this.life = 100;
+            }
+
+            Firework.prototype.draw = function () {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            };
+
+            Firework.prototype.update = function () {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+            };
+
+            function Heart(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = random(20, 40);
+                this.color = 'red';
+                this.vy = random(-2, -1);
+                this.opacity = 1;
+            }
+
+            Heart.prototype.draw = function () {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.bezierCurveTo(this.x - this.size / 2, this.y - this.size / 2, this.x - this.size, this.y + this.size / 3, this.x, this.y + this.size);
+                ctx.bezierCurveTo(this.x + this.size, this.y + this.size / 3, this.x + this.size / 2, this.y - this.size / 2, this.x, this.y);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            };
+
+            Heart.prototype.update = function () {
+                this.y += this.vy;
+                this.opacity -= 0.01;
+            };
+
+            let fireworks = [];
+            let hearts = [];
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (Math.random() < 0.1) {
+                    fireworks.push(new Firework(random(0, canvas.width), random(0, canvas.height)));
+                }
+                if (Math.random() < 0.05) {
+                    hearts.push(new Heart(random(0, canvas.width), canvas.height));
+                }
+
+                fireworks.forEach((firework, index) => {
+                    firework.draw();
+                    firework.update();
+                    if (firework.life <= 0) {
+                        fireworks.splice(index, 1);
+                    }
+                });
+
+                hearts.forEach((heart, index) => {
+                    heart.draw();
+                    heart.update();
+                    if (heart.opacity <= 0) {
+                        hearts.splice(index, 1);
+                    }
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
         };
     </script>
 </body>
