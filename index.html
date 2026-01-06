@@ -1,374 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5" name="viewport" />
-  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
-  <link rel="stylesheet" href="./style.css">
-  <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
-
-  <!-- Update title and description for a birthday theme -->
-  <title>VER 6.7 | HAPPY BIRTHDAY</title>
-  <link rel="icon" type="image/x-icon" href="https://www.palingit.com/favicon.ico" />
-  <meta name="description" content="A special birthday greeting" />
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gracias</title>
   <style>
-    #timerOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
-      font-family: 'Shippori Antique', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    
-    #timerOverlay.hidden {
-      display: none;
-    }
-    
-    .timer-content {
-      text-align: center;
+
+    .message {
       color: white;
-      padding: 40px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      max-width: 90%;
+      font-size: 2rem;
+      text-align: center;
+      padding: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
-    
-    .timer-title {
-      font-size: 2em;
-      margin-bottom: 20px;
-      animation: pulse 2s ease-in-out infinite;
-    }
-    
-    .timer-display {
-      font-size: 3em;
-      font-weight: bold;
-      margin: 30px 0;
-      font-family: 'Dancing Script', cursive;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .timer-message {
-      font-size: 1.2em;
-      opacity: 0.9;
-      margin-top: 20px;
-    }
-    
-    .timer-date {
-      font-size: 0.9em;
-      opacity: 0.8;
-      margin-top: 10px;
-    }
-    
-    .music-note {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      font-size: 2em;
-      opacity: 0.6;
-      animation: float 3s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    
-    .gift-icon {
-      font-size: 5em;
-      margin-bottom: 20px;
-      animation: bounce 1s ease-in-out infinite;
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
+
     @media (max-width: 600px) {
-      .timer-title {
-        font-size: 1.5em;
-      }
-      .timer-display {
-        font-size: 2em;
-      }
-      .timer-message {
-        font-size: 1em;
+      .message {
+        font-size: 1.5rem;
+        padding: 1rem;
       }
     }
   </style>
 </head>
-
-<body style="background: linear-gradient(to bottom, #ffe1e1, #ff217de0), url(./r.jpg);
-    height: 100vh;">
-  
-  <!-- Timer Overlay -->
-  <div id="timerOverlay">
-    <div class="timer-content">
-      <div class="gift-icon">🎁</div>
-      <div class="timer-title">Tu regalo está bloqueado...</div>
-      <div class="timer-display" id="countdown">--:--:--:--</div>
-      <div class="timer-message">Se desbloqueará el 21 de Diciembre a las 00:00 🎂</div>
-      <div class="timer-date" id="currentDate"></div>
-    </div>
-    <div class="music-note">🎵</div>
-    
-    <!-- Background music iframe (YouTube embed set to autoplay and loop) -->
-    <iframe 
-      id="timerMusic" 
-      width="0" 
-      height="0" 
-      src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1&playlist=jfKfPfyJRdk&controls=0" 
-      frameborder="0" 
-      allow="autoplay; encrypted-media"
-      style="display:none;">
-    </iframe>
-  </div>
-  
-  <audio src="./y2mate (mp3cut.net).mp3" id="linkmp3" class="sembunyi"></audio>
-
-  <div id="bodyblur">
-    <!-- Wallpaper -->
-    <img src="" id="wallpaper" />
-  </div>
-
-  <div id="Content">
-    <div id="kadoIn">
-      <!-- Gift Button -->
-      <img src="./Valentine-Surprise.png" alt="Open Gift Button" />
-    </div>
-    <p id="ket">
-      <span style="font-style: italic; color: rgb(0,0,0); margin-top: 3px !important; ">Open the gift, cutie:3</span>
-    </p>
-
-    <div class="kumpulanstiker" style="margin-top: 95px;">
-      <!-- Stickers for Content -->
-      <img src="https://media.tenor.com/4Ijycn6xFzUAAAAj/mochi-blue-roses.gif" id="fotostiker" />
-      <img src="https://feeldreams.github.io/bunga.gif" id="fotostiker1" />
-      <img src="https://feeldreams.github.io/pandacoklat.gif" id="fotostiker2" />
-      <img src="https://media.tenor.com/snFoLI-S9CQAAAAj/milk-and-mocha.gif" id="fotostiker3" />
-      <img src="https://feeldreams.github.io/emawh.gif" id="fotostiker4" />
-      <img src="https://feeldreams.github.io/pandacoklat.gif" id="fotostiker5" />
-    </div>
-
-    <p id="halo" class="halo"></p>
-
-    <div>
-      <blockquote id="bq" data-text="💞">
-        <!-- Update the messages for a birthday greeting -->
-        <p id="kalimat">
-          Felicidades!!! Ahora, verás todas las cosas que he estado preparando desde verano.
-        </p>
-
-        <!-- Message -->
-        <p id="pesan1">Toca aquí para tu primera sorpresa de cumpleaños! (Toca todos los emojis)</p>
-        <div id="kolombaru">
-          <li id="lv1">🎂</li>
-          <li id="lv2">🎁</li>
-          <li id="lv3">🥳</li>
-          <li id="lv4">💖</li>
-        </div>
-
-        <p id="pesan2">Eres una persona especial, y hoy es un gran dia para tí.</p>
-        <p id="pesan3">Sabes que lo hace también mas especial?</p>
-        <p id="pesan4" class="sty2">El hecho de que hayan pasado exactamente 705 dias (1 año, 11 meses, 5 dias) desde el dia que nos conocimos y sigamos hablando!</p>
-        <p id="pesan5" class="sty2">
-          Hoy, yo, te deseo que tengas un gran día y que lo pases super bien (en una forma legal😅) el dia de tu cumpleaños.
-          Te quiero mucho Wind, sigue así con los estudios, estoy muy orgulloso de ti. 
-        </p>
-        <p id="pesan6" class="sty2">
-          Recuerda, todo lo que ha pasado este año lo has podido superar estando aquí, en este mundo. El hecho de que hayas bloqueado a Alex y te hayas centrado en los estudios simpremente suspendiendo 2 es impresionante. Sigue así de bien, por favor.
-        </p>
-
-        <!-- Next Button -->
-        <p id="opsL">Clica aquí para continuar!</p>
-      </blockquote>
-    </div>
-
-    <!-- Send Message Button -->
-    <div id="Tombol"><a id="By">&#128140; Siguiente</a></div>
-
-    <!-- Rejected Message (if needed) -->
-    <div id="pesanditolak">
-      <img id="stikerditolak" src="https://feeldreams.github.io/weee.gif" />
-      <p id="kataditolak">
-        JAJAJJJAJAJA
-        Deja que te obligue a abrirlo.
-      </p>
-    </div>
-  </div>
-
-  <script>
-    // Timer Script
-    function checkTime() {
-      const now = new Date();
-      
-      // Target: December 21, 2025 at 00:00:00
-      const targetDate = new Date(2025, 11, 21, 0, 0, 0); // Month is 0-indexed, so 11 = December
-      
-      // Show current date
-      const currentDateStr = now.toLocaleDateString('es-ES', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      document.getElementById('currentDate').textContent = currentDateStr;
-      
-      // Check if current time is on or after target date
-      if (now >= targetDate) {
-        // Remove iframe to stop music BEFORE hiding overlay
-        const musicIframe = document.getElementById('timerMusic');
-        if (musicIframe) {
-          musicIframe.src = ''; // Stop the video first
-          musicIframe.remove(); // Then remove it
-        }
-        document.getElementById('timerOverlay').classList.add('hidden');
-        return true;
-      }
-      
-      // Calculate time remaining in milliseconds
-      const diff = targetDate - now;
-      
-      // Convert to days, hours, minutes, seconds
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      
-      // Format display
-      let display = '';
-      if (days > 0) {
-        display = `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      } else {
-        display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      }
-      
-      document.getElementById('countdown').textContent = display;
-      
-      return false;
-    }
-    
-    // Check immediately
-    if (!checkTime()) {
-      // Update every second
-      setInterval(function() {
-        if (checkTime()) {
-          // Show unlock animation
-          Swal.fire({
-            title: '¡Desbloqueado! 🎉',
-            text: 'Ya puedes abrir tu regalo de cumpleaños',
-            icon: 'success',
-            timer: 3000,
-            showConfirmButton: false
-          });
-        }
-      }, 1000);
-    }
-    
-    // Main script remains similar; further changes are made in a.js if needed.
-    const body = document.querySelector("body");
-    const swalst = Swal.mixin({
-      timer: 2300,
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      timerProgressBar: true,
-      imageHeight: 90,
-    });
-    audio = new Audio("" + linkmp3.src);
-    ftganti = 0;
-    fungsi = 0;
-    fungsiAwal = 0;
-    deffotostiker = fotostiker.src;
-    Content.style = "opacity:1;margin-top:16vh";
-    const swals = Swal.mixin({
-      allowOutsideClick: false,
-      cancelButtonColor: "#FF0040",
-      imageHeight: 80,
-    });
-
-    document.getElementById("kadoIn").onclick = function () {
-      if (fungsiAwal == 0) {
-        audio.play();
-        fungsiAwal = 1;
-        kadoIn.style =
-          "transition:all .8s ease;transform:scale(10);opacity:0";
-        wallpaper.style = "transform: scale(1.5);";
-        ket.style = "display:none";
-        setTimeout(initengahan, 300);
-        setTimeout(inipesan, 500);
-      }
-    };
-
-    async function inipesan() {
-      var { value: nama } = await swals.fire({
-        title: "Cual es tu nombre? (Pon Wind)",
-        input: "text",
-      });
-      if (nama && nama.length < 11) {
-        window.nama = nama;
-        vketikhalo = "Felicidades, " + nama + "!";
-        mulainama();
-      } else {
-        await Swal.fire({
-          title: "Me encanta tu nombre, pero es demasiado largo.",
-          text: "Pon un nombre un pelín mas corto.",
-          icon: "warning",
-        });
-        inipesan();
-      }
-    }
-
-    var tanya = "Que te parece si te enseño tu primer regalo?";
-    var opstanya = "Puedes elegir:";
-    var tompositif = "Siiii.";
-    var tomnegatif = "Hell no💀";
-
-    async function pertanyaan() {
-      var { isConfirmed: prtanya } = await swals.fire({
-        title: nama + ", " + tanya,
-        text: "" + opstanya,
-        imageUrl: "" + fotostiker5.src,
-        showCancelButton: true,
-        confirmButtonText: "" + tompositif,
-        cancelButtonText: "" + tomnegatif,
-      });
-      if (prtanya) {
-        pesanwhatsapp = "Bien " + nama + ", hagamos que empieze la magia de tu cumpleaños!";
-        menuju();
-      } else {
-        pesanwhatsapp = nama + ", no te pierdas este día tan especial!";
-        await swalst.fire({
-          title: "" + kataditolak.innerHTML,
-          timer: 2000,
-          imageUrl: "" + stikerditolak.src,
-        });
-        menuju();
-      }
-    }
-  </script>
-  <script src="a.js"></script>
+<body>
+  <p class="message">Gracias por verlo, Wind.</p>
 </body>
-
 </html>
